@@ -1,0 +1,407 @@
+{
+  "version": "1.0",
+  "costCalculation": {
+    "aws.ec2": {
+      "displayName": "AWS EC2",
+      "matchStrategy": "discriminator",
+      "discriminators": {
+        "cloud.platform": "aws_ec2"
+      },
+      "required": {
+        "cloud.platform": {
+          "description": "Cloud platform identifier",
+          "resolution": "static",
+          "value": "aws_ec2"
+        },
+        "host.id": {
+          "description": "EC2 instance ID",
+          "resolution": "runtime",
+          "example": "i-abc1234",
+          "runtimeSource": "EC2 instance metadata (http://169.254.169.254/latest/meta-data/instance-id) or OTEL resource detector"
+        },
+        "host.type": {
+          "description": "EC2 instance type",
+          "resolution": "static",
+          "example": "t3.micro"
+        },
+        "cloud.region": {
+          "description": "AWS region",
+          "resolution": "static",
+          "example": "us-east-1"
+        },
+        "os.type": {
+          "description": "Operating system",
+          "resolution": "static",
+          "allowedValues": ["linux", "windows"],
+          "default": "linux"
+        }
+      },
+      "optional": {
+        "aws.ec2.platform_details": {
+          "description": "Platform details for pricing (RHEL, SUSE, etc.)",
+          "resolution": "static",
+          "example": "Red Hat Enterprise Linux"
+        },
+        "aws.ec2.license_model": {
+          "description": "License model",
+          "resolution": "static",
+          "allowedValues": ["No License required", "Bring your own license"],
+          "default": "No License required"
+        },
+        "aws.ec2.tenancy": {
+          "description": "Instance tenancy",
+          "resolution": "static",
+          "allowedValues": ["shared", "default", "dedicated", "host"],
+          "default": "shared"
+        },
+        "aws.ec2.instance_lifecycle": {
+          "description": "Instance lifecycle",
+          "resolution": "static",
+          "allowedValues": ["spot", "scheduled", "on-demand"]
+        },
+        "aws.ec2.capacity_reservation_id": {
+          "description": "Capacity reservation ID",
+          "resolution": "runtime"
+        },
+        "aws.ec2.capacity_reservation_preference": {
+          "description": "Capacity reservation preference",
+          "resolution": "static",
+          "allowedValues": ["open", "none"]
+        },
+        "aws.ec2.fleet_id": {
+          "description": "EC2 Fleet ID",
+          "resolution": "runtime"
+        },
+        "aws.ec2.fleet_request_id": {
+          "description": "Spot Fleet request ID",
+          "resolution": "runtime"
+        }
+      }
+    },
+    "aws.lambda": {
+      "displayName": "AWS Lambda",
+      "matchStrategy": "presence",
+      "required": {
+        "aws.lambda.memory_size": {
+          "description": "Memory allocation in MB",
+          "resolution": "runtime",
+          "example": "2048",
+          "runtimeSource": "Lambda context object (context.MemoryLimitInMB) or AWS_LAMBDA_FUNCTION_MEMORY_SIZE env var"
+        },
+        "aws.region": {
+          "description": "AWS region",
+          "resolution": "runtime",
+          "example": "us-east-1",
+          "runtimeSource": "AWS_REGION env var"
+        },
+        "aws.lambda.architecture": {
+          "description": "CPU architecture",
+          "resolution": "static",
+          "allowedValues": ["arm64", "x86_64"],
+          "example": "x86_64"
+        },
+        "aws.lambda.arn": {
+          "description": "Lambda function ARN",
+          "resolution": "runtime",
+          "example": "arn:aws:lambda:us-east-1:123456789012:function:my_function",
+          "runtimeSource": "Lambda context object (context.InvokedFunctionArn)"
+        }
+      },
+      "optional": {}
+    },
+    "aws.rds": {
+      "displayName": "AWS RDS",
+      "matchStrategy": "presence",
+      "required": {
+        "aws.rds.instance.id": {
+          "description": "RDS instance identifier",
+          "resolution": "static",
+          "example": "mydbinstance"
+        },
+        "aws.rds.instance.class": {
+          "description": "RDS instance class",
+          "resolution": "static",
+          "example": "db.t3.micro"
+        },
+        "aws.region": {
+          "description": "AWS region",
+          "resolution": "static",
+          "example": "us-east-1"
+        },
+        "aws.rds.engine": {
+          "description": "Database engine",
+          "resolution": "static",
+          "allowedValues": ["aurora-postgresql", "postgres", "mysql", "mariadb", "oracle-se2", "oracle-ee", "sqlserver-ex", "sqlserver-web", "sqlserver-se", "sqlserver-ee"],
+          "example": "aurora-postgresql"
+        },
+        "aws.rds.deployment.option": {
+          "description": "Deployment option",
+          "resolution": "static",
+          "allowedValues": ["Single-AZ", "Multi-AZ"],
+          "example": "Single-AZ"
+        },
+        "aws.rds.storage.type": {
+          "description": "Storage type",
+          "resolution": "static",
+          "allowedValues": ["aurora", "gp2", "gp3", "io1", "io2", "standard"],
+          "example": "gp3"
+        },
+        "aws.rds.license.model": {
+          "description": "License model",
+          "resolution": "static",
+          "example": "postgresql-license"
+        }
+      },
+      "optional": {}
+    },
+    "aws.fargate": {
+      "displayName": "AWS Fargate",
+      "matchStrategy": "discriminator",
+      "discriminators": {
+        "cloud.platform": "aws_ecs",
+        "aws.ecs.launchtype": "fargate"
+      },
+      "required": {
+        "cloud.platform": {
+          "description": "Cloud platform identifier",
+          "resolution": "static",
+          "value": "aws_ecs"
+        },
+        "aws.ecs.launchtype": {
+          "description": "ECS launch type",
+          "resolution": "static",
+          "value": "fargate"
+        },
+        "aws.ecs.task.arn": {
+          "description": "ECS task ARN (region is extracted from this)",
+          "resolution": "runtime",
+          "example": "arn:aws:ecs:us-east-1:123456789012:task/my-cluster/abc123",
+          "runtimeSource": "ECS_CONTAINER_METADATA_URI_V4 endpoint or OTel AWS ECS resource detector"
+        },
+        "aws.ecs.task.cpu": {
+          "description": "CPU units (millicores)",
+          "resolution": "runtime",
+          "example": "1024",
+          "runtimeSource": "ECS task definition or container metadata endpoint"
+        },
+        "aws.ecs.task.memory": {
+          "description": "Memory in MiB",
+          "resolution": "runtime",
+          "example": "2048",
+          "runtimeSource": "ECS task definition or container metadata endpoint"
+        }
+      },
+      "optional": {
+        "os.type": {
+          "description": "Operating system",
+          "resolution": "static",
+          "allowedValues": ["linux", "windows"],
+          "default": "linux"
+        },
+        "aws.ecs.task.cpu_architecture": {
+          "description": "CPU architecture",
+          "resolution": "static",
+          "allowedValues": ["X86_64", "ARM64"],
+          "default": "X86_64"
+        },
+        "aws.ecs.task.capacity_provider": {
+          "description": "Capacity provider",
+          "resolution": "static",
+          "allowedValues": ["FARGATE", "FARGATE_SPOT"],
+          "default": "FARGATE"
+        }
+      }
+    },
+    "azure.vm": {
+      "displayName": "Azure VM",
+      "matchStrategy": "presence",
+      "required": {
+        "azure.vm.service_name": {
+          "description": "VM service name",
+          "resolution": "runtime",
+          "runtimeSource": "Azure Instance Metadata Service (IMDS) or application config"
+        },
+        "azure.vm.location": {
+          "description": "Azure region",
+          "resolution": "static",
+          "example": "eastus"
+        },
+        "azure.vm.size": {
+          "description": "VM size/SKU",
+          "resolution": "static",
+          "example": "Standard_D2s_v3"
+        },
+        "azure.vm.os_type": {
+          "description": "Operating system",
+          "resolution": "static",
+          "allowedValues": ["Linux", "Windows"]
+        },
+        "azure.vm.priority": {
+          "description": "VM priority",
+          "resolution": "static",
+          "example": "Regular"
+        }
+      },
+      "optional": {}
+    },
+    "azure.asp": {
+      "displayName": "Azure App Service Plan",
+      "matchStrategy": "presence",
+      "required": {
+        "azure.asp.service_name": {
+          "description": "App Service Plan name",
+          "resolution": "runtime",
+          "runtimeSource": "WEBSITE_SITE_NAME env var or Azure App Service environment"
+        },
+        "azure.asp.location": {
+          "description": "Azure region",
+          "resolution": "static",
+          "example": "eastus"
+        },
+        "azure.asp.sku_name": {
+          "description": "SKU/pricing tier",
+          "resolution": "static",
+          "example": "P1v3"
+        },
+        "azure.asp.os_type": {
+          "description": "Operating system",
+          "resolution": "static",
+          "allowedValues": ["Linux", "Windows"]
+        },
+        "azure.asp.instances": {
+          "description": "Number of instances",
+          "resolution": "static",
+          "example": "2"
+        }
+      },
+      "optional": {}
+    },
+    "hetzner.cloud": {
+      "displayName": "Hetzner Cloud",
+      "matchStrategy": "discriminator",
+      "discriminators": {
+        "cloud.platform": "hetzner_cloud"
+      },
+      "required": {
+        "cloud.platform": {
+          "description": "Cloud platform identifier",
+          "resolution": "static",
+          "value": "hetzner_cloud"
+        },
+        "host.id": {
+          "description": "Hetzner server ID",
+          "resolution": "runtime",
+          "runtimeSource": "Hetzner metadata service or application config"
+        },
+        "host.type": {
+          "description": "Hetzner server type",
+          "resolution": "static",
+          "example": "cpx51"
+        },
+        "cloud.region": {
+          "description": "Hetzner location code",
+          "resolution": "static",
+          "example": "hel1"
+        }
+      },
+      "optional": {}
+    },
+    "hetzner.dedicated": {
+      "displayName": "Hetzner Dedicated",
+      "matchStrategy": "discriminator",
+      "discriminators": {
+        "cloud.platform": "hetzner_dedicated"
+      },
+      "required": {
+        "cloud.platform": {
+          "description": "Cloud platform identifier",
+          "resolution": "static",
+          "value": "hetzner_dedicated"
+        },
+        "host.id": {
+          "description": "Hetzner server number",
+          "resolution": "runtime",
+          "runtimeSource": "Hetzner Robot API or application config"
+        }
+      },
+      "optional": {
+        "host.type": {
+          "description": "Server type",
+          "resolution": "static"
+        },
+        "cloud.region": {
+          "description": "Hetzner location code",
+          "resolution": "static"
+        }
+      }
+    }
+  },
+  "costAttribution": {
+    "deployment.environment.name": {
+      "category": "deployment",
+      "description": "Deployment tier name",
+      "resolution": "static",
+      "example": "production"
+    },
+    "cloud.resource_id": {
+      "category": "cloud",
+      "description": "Cloud-provider native resource identifier (e.g., ARN)",
+      "resolution": "runtime",
+      "example": "arn:aws:lambda:us-east-1:123456789012:function:foo"
+    },
+    "cloud.provider": {
+      "category": "cloud",
+      "description": "Cloud provider name",
+      "resolution": "static",
+      "example": "aws"
+    },
+    "cloud.region": {
+      "category": "cloud",
+      "description": "Cloud provider region",
+      "resolution": "static",
+      "example": "us-east-1"
+    },
+    "cloud.platform": {
+      "category": "cloud",
+      "description": "Cloud platform identifier (also used as discriminator for cost calculation)",
+      "resolution": "static",
+      "example": "aws_ec2"
+    },
+    "code.function.name": {
+      "category": "code",
+      "description": "Fully-qualified function/method name",
+      "resolution": "runtime",
+      "example": "com.example.MyHttpService.serveRequest"
+    },
+    "service.name": {
+      "category": "service",
+      "description": "Logical name of the service",
+      "resolution": "static",
+      "example": "Shoppingcart"
+    },
+    "service.namespace": {
+      "category": "service",
+      "description": "Namespace for service.name",
+      "resolution": "static",
+      "example": "Shop"
+    },
+    "service.version": {
+      "category": "service",
+      "description": "Service API or implementation version",
+      "resolution": "static",
+      "example": "2.0.0"
+    },
+    "app.user.id": {
+      "category": "user",
+      "description": "User ID of the request originator",
+      "resolution": "runtime",
+      "example": "3032"
+    },
+    "app.user.org.id": {
+      "category": "user",
+      "description": "Organization ID of the request originator",
+      "resolution": "runtime",
+      "example": "1234"
+    }
+  }
+}
