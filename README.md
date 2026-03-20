@@ -33,6 +33,10 @@ Wingman will:
 - .NET (ASP.NET Core)
 - Node.js (Express, Fastify, etc.)
 
+## Case Studies
+
+- **[FastAPI RealWorld Backend](case-studies/fastapi-realworld-backend.md)** — Full integration walkthrough on [borys25ol/fastapi-realworld-backend](https://github.com/borys25ol/fastapi-realworld-backend), a production-style REST API with FastAPI, SQLAlchemy, and PostgreSQL. Shows the complete Claude Code transcript and resulting diff.
+
 ## Development
 
 ```bash
