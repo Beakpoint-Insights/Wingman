@@ -1,6 +1,6 @@
 {
   "name": "@beakpoint/wingman",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AI-assisted Beakpoint integration CLI",
   "type": "module",
   "main": "dist/index.js",
