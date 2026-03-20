@@ -32,7 +32,10 @@
         "os.type": {
           "description": "Operating system",
           "resolution": "static",
-          "allowedValues": ["linux", "windows"],
+          "allowedValues": [
+            "linux",
+            "windows"
+          ],
           "default": "linux"
         }
       },
@@ -45,19 +48,31 @@
         "aws.ec2.license_model": {
           "description": "License model",
           "resolution": "static",
-          "allowedValues": ["No License required", "Bring your own license"],
+          "allowedValues": [
+            "No License required",
+            "Bring your own license"
+          ],
           "default": "No License required"
         },
         "aws.ec2.tenancy": {
           "description": "Instance tenancy",
           "resolution": "static",
-          "allowedValues": ["shared", "default", "dedicated", "host"],
+          "allowedValues": [
+            "shared",
+            "default",
+            "dedicated",
+            "host"
+          ],
           "default": "shared"
         },
         "aws.ec2.instance_lifecycle": {
           "description": "Instance lifecycle",
           "resolution": "static",
-          "allowedValues": ["spot", "scheduled", "on-demand"]
+          "allowedValues": [
+            "spot",
+            "scheduled",
+            "on-demand"
+          ]
         },
         "aws.ec2.capacity_reservation_id": {
           "description": "Capacity reservation ID",
@@ -66,7 +81,10 @@
         "aws.ec2.capacity_reservation_preference": {
           "description": "Capacity reservation preference",
           "resolution": "static",
-          "allowedValues": ["open", "none"]
+          "allowedValues": [
+            "open",
+            "none"
+          ]
         },
         "aws.ec2.fleet_id": {
           "description": "EC2 Fleet ID",
@@ -97,7 +115,10 @@
         "aws.lambda.architecture": {
           "description": "CPU architecture",
           "resolution": "static",
-          "allowedValues": ["arm64", "x86_64"],
+          "allowedValues": [
+            "arm64",
+            "x86_64"
+          ],
           "example": "x86_64"
         },
         "aws.lambda.arn": {
@@ -131,19 +152,40 @@
         "aws.rds.engine": {
           "description": "Database engine",
           "resolution": "static",
-          "allowedValues": ["aurora-postgresql", "postgres", "mysql", "mariadb", "oracle-se2", "oracle-ee", "sqlserver-ex", "sqlserver-web", "sqlserver-se", "sqlserver-ee"],
+          "allowedValues": [
+            "aurora-postgresql",
+            "postgres",
+            "mysql",
+            "mariadb",
+            "oracle-se2",
+            "oracle-ee",
+            "sqlserver-ex",
+            "sqlserver-web",
+            "sqlserver-se",
+            "sqlserver-ee"
+          ],
           "example": "aurora-postgresql"
         },
         "aws.rds.deployment.option": {
           "description": "Deployment option",
           "resolution": "static",
-          "allowedValues": ["Single-AZ", "Multi-AZ"],
+          "allowedValues": [
+            "Single-AZ",
+            "Multi-AZ"
+          ],
           "example": "Single-AZ"
         },
         "aws.rds.storage.type": {
           "description": "Storage type",
           "resolution": "static",
-          "allowedValues": ["aurora", "gp2", "gp3", "io1", "io2", "standard"],
+          "allowedValues": [
+            "aurora",
+            "gp2",
+            "gp3",
+            "io1",
+            "io2",
+            "standard"
+          ],
           "example": "gp3"
         },
         "aws.rds.license.model": {
@@ -195,19 +237,28 @@
         "os.type": {
           "description": "Operating system",
           "resolution": "static",
-          "allowedValues": ["linux", "windows"],
+          "allowedValues": [
+            "linux",
+            "windows"
+          ],
           "default": "linux"
         },
         "aws.ecs.task.cpu_architecture": {
           "description": "CPU architecture",
           "resolution": "static",
-          "allowedValues": ["X86_64", "ARM64"],
+          "allowedValues": [
+            "X86_64",
+            "ARM64"
+          ],
           "default": "X86_64"
         },
         "aws.ecs.task.capacity_provider": {
           "description": "Capacity provider",
           "resolution": "static",
-          "allowedValues": ["FARGATE", "FARGATE_SPOT"],
+          "allowedValues": [
+            "FARGATE",
+            "FARGATE_SPOT"
+          ],
           "default": "FARGATE"
         }
       }
@@ -234,7 +285,10 @@
         "azure.vm.os_type": {
           "description": "Operating system",
           "resolution": "static",
-          "allowedValues": ["Linux", "Windows"]
+          "allowedValues": [
+            "Linux",
+            "Windows"
+          ]
         },
         "azure.vm.priority": {
           "description": "VM priority",
@@ -266,7 +320,10 @@
         "azure.asp.os_type": {
           "description": "Operating system",
           "resolution": "static",
-          "allowedValues": ["Linux", "Windows"]
+          "allowedValues": [
+            "Linux",
+            "Windows"
+          ]
         },
         "azure.asp.instances": {
           "description": "Number of instances",
@@ -332,6 +389,63 @@
         "cloud.region": {
           "description": "Hetzner location code",
           "resolution": "static"
+        }
+      }
+    },
+    "heroku.dyno": {
+      "displayName": "Heroku Dyno",
+      "matchStrategy": "discriminator",
+      "discriminators": {
+        "cloud.platform": "heroku_dyno"
+      },
+      "required": {
+        "cloud.platform": {
+          "description": "Cloud platform identifier",
+          "resolution": "static",
+          "value": "heroku_dyno"
+        },
+        "host.type": {
+          "description": "Heroku dyno type",
+          "resolution": "static",
+          "example": "Standard-1X",
+          "allowedValues": [
+            "Basic",
+            "Standard-1X",
+            "Standard-2X",
+            "Performance-M",
+            "Performance-L",
+            "Performance-L-RAM",
+            "Performance-XL",
+            "Performance-2XL",
+            "Private-S",
+            "Private-M",
+            "Private-L",
+            "Private-L-RAM",
+            "Private-XL",
+            "Private-2XL",
+            "Shield-S",
+            "Shield-M",
+            "Shield-L",
+            "Shield-L-RAM",
+            "Shield-XL",
+            "Shield-2XL"
+          ]
+        },
+        "cloud.region": {
+          "description": "Heroku region",
+          "resolution": "static",
+          "example": "us",
+          "allowedValues": [
+            "us",
+            "eu"
+          ]
+        }
+      },
+      "optional": {
+        "cloud.provider": {
+          "description": "Cloud provider name",
+          "resolution": "static",
+          "value": "heroku"
         }
       }
     }

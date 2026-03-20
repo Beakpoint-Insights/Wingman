@@ -20,6 +20,7 @@ const SERVICE_CHOICES = [
   { name: "Azure App Service Plan", value: "azure.asp" },
   { name: "Hetzner Cloud", value: "hetzner.cloud" },
   { name: "Hetzner Dedicated", value: "hetzner.dedicated" },
+  { name: "Heroku Dyno", value: "heroku.dyno" },
   { name: "Other", value: "other" },
 ];
 
