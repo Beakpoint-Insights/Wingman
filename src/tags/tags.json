@@ -404,6 +404,12 @@
           "resolution": "static",
           "value": "heroku_dyno"
         },
+        "host.id": {
+          "description": "Heroku dyno instance name",
+          "resolution": "runtime",
+          "runtimeSource": "DYNO environment variable set by Heroku runtime",
+          "example": "web.1"
+        },
         "host.type": {
           "description": "Heroku dyno type",
           "resolution": "static",
